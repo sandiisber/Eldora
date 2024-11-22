@@ -76,7 +76,7 @@ Ensure the following tools and libraries are installed:
      ```
    - Install required Python packages:
      ```bash
-     pip install flask flask-cors python-dotenv openai
+     pip install flask flask-cors python-dotenv openai==0.27.8
      ```
 
 4. **Run the Backend**:
