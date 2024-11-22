@@ -42,9 +42,6 @@ Ensure the following tools and libraries are installed:
 
 - Python (>= 3.7)
 - pip (Python package manager)
-- Node.js (optional, for advanced front-end development)
-- A compatible web browser
-
 ---
 
 ### Steps
@@ -76,15 +73,10 @@ Ensure the following tools and libraries are installed:
    - Create a virtual environment and activate it:
      ```bash
      python -m venv venv
-     source venv/bin/activate  # On Windows: venv\Scripts\activate
      ```
    - Install required Python packages:
      ```bash
      pip install flask flask-cors python-dotenv openai
-     ```
-   - Optionally, save the installed packages to a `requirements.txt` file for version tracking:
-     ```bash
-     pip freeze > requirements.txt
      ```
 
 4. **Run the Backend**:
