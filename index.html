@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Interview App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/258db41849.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!--Hemsidan-->
+    <header>
+        <a href="homepage.html">
+            <img src="images/logo.PNG" class="logo" alt="Eldora Logo">
+        </a>
+    </header>
+
+    <div class="container">
+        <div class="robot-pic-container">
+            <img class="robot-pic" src="images/robot.webp" alt="robot-interviewer">
+        </div>
+        <div class="field-group">
+            <label for="language">Select Language:</label>
+            <select id="language">
+                <option value="">-- select your language --</option>
+                <option value="en-US">English</option>
+                <option value="sv-SE">Svenska</option>
+            </select>
+        </div>
+
+        <div class="field-group">
+            <label for="field">Field or Career:</label>
+            <input type="text" id="field" placeholder="Specify the field or career you are applying for">
+        </div>
+
+        <div class="field-group">
+            <label for="user-info">Your Background Information:</label>
+            <textarea id="user-info" placeholder="Provide some background information about yourself..."></textarea>
+        </div>
+
+        <div class="field-group">
+            <label for="job-des">Job description:</label>
+            <textarea id="job-des" placeholder="Provide more job details..."></textarea>
+        </div>
+
+        <button onclick="startInterview()">Start Interview</button>
+    </div>
+
+    <div id="modal-overlay"></div>
+    <!-- Modal for Interview -->
+    <div id="interview-modal" class="modal">
+        <div class="modal-content">
+            <div class="top-section">
+                <div class="chat-container">
+                    <div class="chat-body" id="chat-body"></div>
+                    <div class="answer-container">
+                        <textarea id="answer" placeholder="Your answer..."></textarea>
+                    </div>
+                </div>
+                <div class="profiles-pictures">
+                    <div class="interviewer">
+                        <img src="images/interviwer.jpg" alt="interviwer">
+                    </div>
+                    <div class="user">
+                        <img src="images/user.webp" alt="candidate">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="footer-section">
+                <div class="flex-2">
+                    <div class="chat-footer">
+                        <button disabled class="chat-button" id="record-btn" onclick="startListning()" title="Start Recording"><i
+                                class="fas fa-microphone"></i></button>
+                        <button disabled class="chat-button" id="stop-record-btn" onclick="stopListning()"
+                            title="Stop Recording"><i class="fas fa-pause"></i></button>
+                        <button disabled class="chat-button" id="send-btn" onclick="sendAnswer()" title="Send Answer"><i
+                                class="fas fa-paper-plane"></i></button>
+                        <!-- <div class="recording-indicator" id="recording-indicator">Recording...</div> -->
+                    </div>
+                </div>
+                <div class="flex-1 flex-end">
+                    <button class="end-btn" onclick="endInterview()" title="End Interview">End Interview</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="landscape-warning">
+        <p class="landscape-warning-p">
+        </p>
+    </div>
+    <footer>
+        <p>&copy; 2024 Virtual interviewer</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
