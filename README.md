@@ -45,6 +45,8 @@ Ensure the following tools and libraries are installed:
 - Node.js (optional, for advanced front-end development)
 - A compatible web browser
 
+---
+
 ### Steps
 
 1. **Clone the Repository**:
@@ -69,3 +71,32 @@ Ensure the following tools and libraries are installed:
 
    4. **Verify Your Setup**:
       - Ensure the `.env` file is in the same directory as `app.py` and that it contains the correct key.
+
+3. **Set Up the Backend**:
+   - Create a virtual environment and activate it:
+     ```bash
+     python -m venv venv
+     source venv/bin/activate  # On Windows: venv\Scripts\activate
+     ```
+   - Install required Python packages:
+     ```bash
+     pip install flask flask-cors python-dotenv openai
+     ```
+   - Optionally, save the installed packages to a `requirements.txt` file for version tracking:
+     ```bash
+     pip freeze > requirements.txt
+     ```
+
+4. **Run the Backend**:
+   - Start the Flask server:
+     ```bash
+     python app.py
+     ```
+   - The backend server will be available at `http://127.0.0.1:5000`.
+
+5. **Set Up the Frontend**:
+   - Ensure all front-end files (`index.html`, `styles.css`, `script.js`) are in the same directory.
+   - No additional setup is required for the front-end to work.
+
+6. **Open the Application**:
+   - Open `index.html` in your web browser to access the Virtual Interview App.
