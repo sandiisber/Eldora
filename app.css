@@ -38,14 +38,14 @@ header, footer {
     left: 0;
 }
 
-.robot-pic{
+.user-pic{
     width: 115px;
     height: 115px;
     border-radius: 57.5px;
     margin: auto;
 }
 
-.robot-pic-container{
+.user-pic-container{
    display:flex;
    padding: 5%;
 }

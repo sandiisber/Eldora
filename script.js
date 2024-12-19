@@ -3,6 +3,7 @@ const textarea = document.getElementById('answer');
 var questions = [];
 var answers = [];
 var questionIndex = 0;
+var interviewFinished = false;
 
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)(); //Skapar ett objekt för röstigenkänning (SpeechRecognition), baserat på stöd i webbläsaren.
 recognition.lang = 'en-US'; 
@@ -15,32 +16,70 @@ recognition.onresult = function(event) { //onresult: Funktion som körs när rö
 };
 
 function stopSpeaking(){
+  // Stoppar datorns röst (om den "pratar").
   window.speechSynthesis.cancel()
+  
+  // Hittar elementet på hemsidan som representerar intervjuarens profil.
   const interviewerProfile = document.querySelector('.interviewer');
+  
+  // Tar bort animationen "speaking_waves" från intervjuarens profil.
+  // Animationen kanske ser ut som ljudvågor eller något som rör sig när intervjuaren pratar.
   interviewerProfile.classList.remove('speaking_waves');
 }
 
+
 function startListning() {
-  stopSpeaking()
+  // För säkerhets skull: stänger av eventuell pågående "prat" från datorn.
+  stopSpeaking();
+  
+  // Hittar elementet på hemsidan som representerar användarens profil.
   const userProfile = document.querySelector('.user');
+  
+  // Lägger till animationen "speaking_waves" till användarens profil.
+  // Det visar att användaren pratar och datorn lyssnar.
   userProfile.classList.add('speaking_waves');
 
-  document.getElementById('record-btn').style.display="none"
-  document.getElementById('stop-record-btn').style.display="block"
-  document.getElementById('send-btn').disabled=true
-  document.getElementById('send-btn').style.color="grey"
+  // Gömmer inspelningsknappen eftersom användaren redan spelar in.
+  document.getElementById('record-btn').style.display="none";
+  
+  // Visar istället en stopp-knapp för att användaren ska kunna sluta prata.
+  document.getElementById('stop-record-btn').style.display="block";
+
+  // Inaktiverar skicka-knappen eftersom användaren ännu inte är klar med att prata.
+  document.getElementById('send-btn').disabled=true;
+  
+  // Ändrar skicka-knappens färg till grå för att visa att den inte går att använda.
+  document.getElementById('send-btn').style.color="grey";
+  
+  // Startar datorns röstigenkänning så den kan lyssna på vad användaren säger.
   recognition.start();
 };
 
+
 function stopListning() {
+  // Hittar användarens profil på hemsidan.
   const userProfile = document.querySelector('.user');
+  
+  // Tar bort animationen "speaking_waves" från användarens profil.
+  // Det visar att användaren inte längre pratar.
   userProfile.classList.remove('speaking_waves');
-  document.getElementById('record-btn').style.display="block"
-  document.getElementById('stop-record-btn').style.display="none"
-  document.getElementById('send-btn').disabled=false
-  document.getElementById('send-btn').style.color="white"
+  
+  // Visar inspelningsknappen igen.
+  document.getElementById('record-btn').style.display="block";
+  
+  // Gömmer stopp-knappen eftersom användaren slutat prata.
+  document.getElementById('stop-record-btn').style.display="none";
+  
+  // Aktiverar skicka-knappen så att användaren kan skicka det hen sagt.
+  document.getElementById('send-btn').disabled=false;
+  
+  // Ändrar färgen på skicka-knappen tillbaka till vit för att visa att den är redo att användas.
+  document.getElementById('send-btn').style.color="white";
+  
+  // Stoppar datorns röstigenkänning.
   recognition.stop();
 };
+
 
 /**
  * Asynchronous function to make a POST request to a specified API endpoint.
@@ -84,7 +123,7 @@ function showQuestion(){
   if (questionIndex < questions.length) {
     if (questions) {
       const language = document.getElementById('language').value;
-      const image = "images/interviwer.jpg";
+      const image = "images/interviwer.webp";
       className = "interviewer-message-row"
       message = questions[questionIndex++].replace(/^\d+\.\s*/, '');
       displayMessage(image, className, message);
@@ -131,7 +170,7 @@ async function startInterview() {
   if (greeting) {
       openModal();
 
-      const image = "images/interviwer.jpg";
+      const image = "images/interviwer.webp";
       className = "interviewer-message-row"
       message = greeting;
       displayMessage(image, className, message);
@@ -156,9 +195,10 @@ async function thanksAndGoodBy() {
   const params = { language, field, user_info, job_des, questions, answers };
   const goodbye = await fetchAPI(url, params);
   if (goodbye) {
+      interviewFinished = true;
       openModal();
 
-      const image = "images/interviwer.jpg";
+      const image = "images/interviwer.webp";
       className = "interviewer-message-row"
       message = goodbye.replace(/\[.*?\]/g, '')
       .trim();
@@ -191,7 +231,7 @@ function speak(text, language, readFirstQuestion = false) {
       if(readFirstQuestion === true){
         showQuestion()
       }else{
-        enableChatButtons(true)
+        if(!interviewFinished) enableChatButtons(true)
       }
   };
   window.speechSynthesis.speak(msg);
@@ -248,7 +288,7 @@ async function sendAnswer(){
   const field = document.getElementById('field').value;
   var answer = document.getElementById('answer');
   if(answer.value.trim() !== ''){    
-    const image = "images/user.webp";
+    const image = "images/user.png";
     className = "user-message-row"
     message=textarea.value;
     textarea.value="";
@@ -263,7 +303,7 @@ async function sendAnswer(){
     if (feedback.response) {
         openModal();
   
-        const image = "images/interviwer.jpg";
+        const image = "images/interviwer.webp";
         className = "interviewer-message-row"
         message = feedback.response;
         displayMessage(image, className, message);
@@ -274,35 +314,3 @@ async function sendAnswer(){
 
   }
 }
-// Hitta alla element med klassen "falling-text"
-const fallingTexts = document.querySelectorAll('.falling-text');
-
-// Skapa en Intersection Observer
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            // Lägg till "show"-klassen när texten blir synlig
-            entry.target.classList.add('show');
-        }
-    });
-}, {
-    threshold: 0.5 // Elementet ska vara 50% synligt för att trigga
-});
-
-// Hitta alla element med klassen "falling-text"
-const falling_Texts = document.querySelectorAll('.falling-text');
-
-// Skapa en Intersection Observer och ge den ett unikt namn
-const textObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            // Lägg till "show"-klassen när texten syns
-            entry.target.classList.add('show');
-        } else {
-            // Ta bort "show"-klassen när texten lämnar vyn (valfritt)
-            entry.target.classList.remove('show');
-        }
-    });
-}, {
-    threshold: 0.1 // 10% av elementet måste vara synligt
-});

@@ -14,16 +14,20 @@ body {
     min-height: 100vh;
 }
 
+header, footer {
+    background-color: #282828;
+    padding: 15px 20px;
+    color: #999999;
+    text-align: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    background-color: #282828;
-    position: sticky;
     top: 0;
     z-index: 10;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .logo-div {
@@ -38,56 +42,109 @@ header {
     border-radius: 10px;
 }
 
-.nav-bar ul {
-    display: flex;
-    list-style-type: none;
-    gap: 20px;
+/* Text Box Styling */
+.text-box {
+    background-color: #2a2a2a; /* Modern grå ton */
+    border: 1px solid #444444; /* Subtil kantlinje */
+    border-radius: 12px; /* Mjuka hörn */
+    padding: 20px 25px;
+    margin: 20px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Mjuk skugga */
 }
 
-.nav-links a {
-    text-decoration: none;
-    color: #dddddd;
-    font-size: 16px;
-    transition: color 0.3s;
+.text-box h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #1e90ff; /* Blå rubrik */
+    font-size: 1.8rem;
 }
 
-.nav-links a:hover {
-    color: #1db954;
+.text-box p {
+    color: #dddddd; /* Ljusgrå text */
+    line-height: 1.6;
 }
 
+.text-box ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #cccccc; /* Ljusgrå färg */
+}
+
+/* Hero Section Styling */
 .hero {
+    position: relative;
+    width: 100%; /* Responsive width */
+    padding-bottom: 41.67%; /* Maintain 12:5 aspect ratio dynamically */
+    background-image: url("/images/banner.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 100px 20px;
-    background-color: #333333;
-    color: #ffffff;
+    color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+.overlay {
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px; /* Optional styling */
+    text-align: center; /* Optional styling */
+    background-color: #1e1e1e;
+    opacity: 0.8;
+    border-radius: 10px;
+    width: 500px;
+    height: 200px;
 }
 
-.hero p {
+.hero-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.hero-content p {
     font-size: 1.2rem;
     margin-bottom: 30px;
+    color: #ffffff;
 }
 
 .cta-button {
-    background-color: #1db954;
-    color: #ffffff;
-    border: none;
+    background-color: #535353;
+    color: #fff;
+    font-size: 1rem;
     padding: 10px 20px;
-    font-size: 16px;
+    border: none;
+    border-radius: 20px;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
 }
 
 .cta-button:hover {
-    background-color: #148c3b;
+    background-color: #1DB954;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Main Content Styling */
 .main-content {
     max-width: 1024px;
     margin: 0 auto;
@@ -100,35 +157,8 @@ header {
     text-align: left;
 }
 
-.section h2 {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-    color: #1db954;
-}
-
-.section p,
-.section ul {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #cccccc;
-}
-
-.section ul {
-    list-style-type: disc;
-    padding-left: 20px;
-    text-align: left;
-}
-
 footer {
-    text-align: center;
-    padding: 10px 0;
-    background-color: #282828;
     font-size: 0.9rem;
-    color: #999999;
-}
-
-a{
-    color: white;
 }
 
 /* Responsive Styles */
@@ -139,20 +169,42 @@ a{
         gap: 10px;
     }
 
-    .hero h1 {
+    .overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 10px; /* Optional styling */
+        text-align: center; /* Optional styling */
+        width: 320px;
+        height: 160px;
+        background-color: #1e1e1e;
+        opacity: 0.8;
+        border-radius: 10px;
+    }
+
+    .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+    }
+
+    .hero-content h1 {
         font-size: 2rem;
     }
 
-    .hero p {
+    .hero-content p {
         font-size: 1rem;
     }
 
     .cta-button {
         font-size: 14px;
         padding: 8px 16px;
-    }
-
-    .section h2 {
-        font-size: 1.5rem;
     }
 }
