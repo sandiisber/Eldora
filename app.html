@@ -20,7 +20,7 @@
     <div class="container">
         <div class="user-pic-container">
             <img class="user-pic" src="images/user.png" alt="user-interviewer">
-        </div>
+        </div>        
         <div class="field-group">
             <label for="language">Select Language:</label>
             <select id="language">
@@ -29,7 +29,13 @@
                 <option value="sv-SE">Svenska</option>
             </select>
         </div>
-
+        <div class="field-group">
+            <label for="voice-select">Select Voice:</label>
+            <select id="voice-select">
+                <option value="">-- Select a Voice --</option>
+            </select>
+            <button id="play-voice-btn" onclick="testVoice()">Test selected voice</button>
+        </div>
         <div class="field-group">
             <label for="field">Field or Career:</label>
             <input type="text" id="field" placeholder="Specify the field or career you are applying for">

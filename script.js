@@ -6,7 +6,7 @@ var questionIndex = 0;
 var interviewFinished = false;
 
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)(); //Skapar ett objekt för röstigenkänning (SpeechRecognition), baserat på stöd i webbläsaren.
-recognition.lang = 'en-US'; 
+recognition.lang = 'en-US';
 recognition.lang = 'sv-SE'; 
 recognition.continuous = true; //Gör att röstigenkänning fortsätter utan att stoppa mellan meningar.
 
@@ -152,14 +152,52 @@ async function getInterviewQuestions(){
   questions = questionsResponse.response.split('\n')
 }
 
+function testVoice() {
+  const language = document.getElementById('language').value;
+  const selectedVoiceName = document.getElementById('voice-select').value;
+
+  // Check if both language and voice are selected
+  if (!language) {
+      alert("Please select a language first.");
+      return;
+  }
+  if (!selectedVoiceName) {
+      alert("Please select a voice to test.");
+      return;
+  }
+
+  const selectedVoice = voices.find(voice => voice.name === selectedVoiceName); // Match by name
+  if (!selectedVoice) {
+      alert("Selected voice not found.");
+      return;
+  }
+
+  // Determine the sample text based on the language
+  let sampleText = "This is a voice demonstration. Let us know if this voice suits your preferences."; // Default to English
+  if (language === "sv-SE") {
+      sampleText = "Det finns bara en röst att välja på. Men oroa dig inte, den är ändå fantastisk!";
+  }
+
+  // Create a SpeechSynthesisUtterance for the sample text
+  const msg = new SpeechSynthesisUtterance(sampleText);
+  msg.lang = language;
+  msg.voice = selectedVoice;
+
+  // Speak the sample text
+  window.speechSynthesis.speak(msg);
+}
+
+
+
 async function startInterview() {
   const language = document.getElementById('language').value;
+  const voice = document.getElementById('voice-select').value;
   const field = document.getElementById('field').value;
   const user_info = document.getElementById('user-info').value;
   const job_des = document.getElementById('job-des').value;
 
-  if (!language || !field) {
-      alert("Please select a language and specify the field or career.");
+  if (!language || !voice || !field) {
+      alert("Please select a language, voice and specify the field or career.");
       return;
   }
 
@@ -216,11 +254,65 @@ function enableChatButtons(value) {
   });
 }
 
+// Global variable to store voices
+let voices = [];
+
+// Fetch available voices
+function populateVoiceList() {
+    voices = window.speechSynthesis.getVoices();
+    updateVoiceList();
+}
+
+// Update the voice list dynamically based on the selected language
+function updateVoiceList() {
+    const languageSelect = document.getElementById('language');
+    const selectedLanguage = languageSelect.value; // Get the selected language
+    const voiceSelect = document.getElementById('voice-select');
+
+    if (!selectedLanguage) {
+        // Disable the voice list if no language is selected
+        voiceSelect.innerHTML = '<option value="">-- Select a Language First --</option>';
+        voiceSelect.disabled = true;
+        return;
+    }
+
+    // Enable the voice list and filter voices based on the selected language
+    voiceSelect.disabled = false;
+    voiceSelect.innerHTML = '<option value="">-- Select a Voice --</option>'; // Reset options
+
+    // Filter voices based on the selected language
+    const filteredVoices = voices.filter(voice => voice.lang.startsWith(selectedLanguage));
+    filteredVoices.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.value = voice.name; // Use the voice's name as the value
+        option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' [Default]' : ''}`;
+        voiceSelect.appendChild(option);
+    });
+
+    // Show a message if no voices are available for the selected language
+    if (voiceSelect.options.length === 1) {
+        const noVoiceOption = document.createElement('option');
+        noVoiceOption.value = "";
+        noVoiceOption.textContent = "No voices available for the selected language";
+        voiceSelect.appendChild(noVoiceOption);
+    }
+}
+
 function speak(text, language, readFirstQuestion = false) {
+  window.speechSynthesis.cancel();
   enableChatButtons(false)
   const msg = new SpeechSynthesisUtterance(text);
   msg.lang = language
   
+  // Get the selected voice from the dropdown
+  const selectedVoiceName = document.getElementById('voice-select').value;
+  const selectedVoice = voices.find(voice => voice.name === selectedVoiceName); // Match by name
+  if (selectedVoice) {
+      msg.voice = selectedVoice;
+  } else {
+      console.warn("No matching voice found. Using the default voice.");
+  }
+
   const interviewerProfile = document.querySelector('.interviewer');
   const pulseIntensity = 0.8;
   interviewerProfile.style.setProperty('--pulse-speed', `${pulseIntensity}s`);
@@ -236,6 +328,24 @@ function speak(text, language, readFirstQuestion = false) {
   };
   window.speechSynthesis.speak(msg);
 }
+
+// Event listener to update voices when language changes
+document.getElementById('language').addEventListener('change', updateVoiceList);
+
+// Initialize the voices when the page loads
+window.onload = () => {
+    populateVoiceList();
+
+    // Ensure voices are updated dynamically if loaded asynchronously
+    if (typeof speechSynthesis !== 'undefined') {
+        speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+
+    // Disable voice list initially
+    document.getElementById('voice-select').disabled = true;
+};
+
+
 
 
 function openModal() {
@@ -254,6 +364,10 @@ function endInterview() {
   const chatBody = document.getElementById('chat-body');
   chatBody.innerHTML=""
   document.getElementById('answer').value=""
+  questions = [];
+  answers = [];
+  questionIndex = 0;
+  interviewFinished = false;
   closeModal();
 }
 
