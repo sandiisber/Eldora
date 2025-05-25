@@ -1,19 +1,17 @@
-// Speech to Text (SpeechRecognition)
-const textarea = document.getElementById('answer');
+var textarea = document.getElementById('answer');
 var questions = [];
 var answers = [];
 var questionIndex = 0;
 var interviewFinished = false;
 
-// Skapar en instans av SpeechRecognition (stöd för äldre webbläsare inkluderas)
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
 // Aktiverar kontinuerlig lyssning
 recognition.continuous = true;
 
 // Körs när tal transkriberas
 recognition.onresult = function (event) {
-  const transcript = event.results[event.resultIndex][0].transcript; // Hämtar transkriberad text
+  var transcript = event.results[event.resultIndex][0].transcript; // Hämtar transkriberad text
   textarea.value += transcript + ' '; // Lägger till texten i textrutan
 };
 
@@ -23,7 +21,7 @@ function stopSpeaking() {
   window.speechSynthesis.cancel()
 
   // Hittar elementet på hemsidan som representerar intervjuarens profil.
-  const interviewerProfile = document.querySelector('.interviewer');
+  var interviewerProfile = document.querySelector('.interviewer');
 
   // Tar bort animationen "speaking_waves" från intervjuarens profil.
   // Animationen kanske ser ut som ljudvågor eller något som rör sig när intervjuaren pratar.
@@ -36,7 +34,7 @@ function startListning() {
   stopSpeaking();
 
   // Hittar elementet på hemsidan som representerar användarens profil.
-  const userProfile = document.querySelector('.user');
+  var userProfile = document.querySelector('.user');
 
   // Lägger till animationen "speaking_waves" till användarens profil.
   // Det visar att användaren pratar och datorn lyssnar.
@@ -54,7 +52,7 @@ function startListning() {
   // Ändrar skicka-knappens färg till grå för att visa att den inte går att använda.
   document.getElementById('send-btn').style.color = "grey";
 
-  const language = document.getElementById('language').value;
+  var language = document.getElementById('language').value;
 
   // Ställer in språket till svenska
   recognition.lang = language;
@@ -66,7 +64,7 @@ function startListning() {
 
 function stopListning() {
   // Hittar användarens profil på hemsidan.
-  const userProfile = document.querySelector('.user');
+  var userProfile = document.querySelector('.user');
 
   // Tar bort animationen "speaking_waves" från användarens profil.
   // Det visar att användaren inte längre pratar.
@@ -95,9 +93,9 @@ function stopListning() {
  * @param {Object} params - An object containing the parameters to send in the request body.
  * @returns {Object|null} - Returns the JSON response from the API if successful, or null if an error occurs.
  */
-
+//Skickar en förfrågan till API och returnerar svar
 async function fetchAPI(url, params) {
-  const options = {
+  var options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -107,12 +105,12 @@ async function fetchAPI(url, params) {
 
   try {
 
-    const response = await fetch(url, options);
+    var response = await fetch(url, options);
 
 
     if (!response.ok) {
 
-      const errorResponse = await response.json();
+      var errorResponse = await response.json();
       alert(`Error: ${errorResponse.error}`);
       return null;
     }
@@ -130,8 +128,8 @@ async function fetchAPI(url, params) {
 function showQuestion() {
   if (questionIndex < questions.length) {
     if (questions) {
-      const language = document.getElementById('language').value;
-      const image = "images/interviwer.webp";
+      var language = document.getElementById('language').value;
+      var image = "images/interviwer.webp";
       className = "interviewer-message-row"
       message = questions[questionIndex++].replace(/^\d+\.\s*/, '');
       displayMessage(image, className, message);
@@ -142,27 +140,27 @@ function showQuestion() {
     thanksAndGoodBy()
   }
 }
-
+//Hämtar intervjufrågor från servern baserat på användarens val
 async function getInterviewQuestions() {
-  const language = document.getElementById('language').value;
-  const field = document.getElementById('field').value;
-  const user_info = document.getElementById('user-info').value;
-  const job_des = document.getElementById('job-des').value;
+  var language = document.getElementById('language').value;
+  var field = document.getElementById('field').value;
+  var user_info = document.getElementById('user-info').value;
+  var job_des = document.getElementById('job-des').value;
 
   if (!language || !field) {
     alert("Please select a language and specify the field or career.");
     return;
   }
-  const url = 'http://127.0.0.1:5000/get-interview-questions';
-  const params = { language, field, user_info, job_des };
+  var url = 'http://127.0.0.1:5000/get-interview-questions';
+  var params = { language, field, user_info, job_des };
 
   questionsResponse = await fetchAPI(url, params);
   questions = questionsResponse.response.split('\n')
 }
 
 function testVoice() {
-  const language = document.getElementById('language').value;
-  const selectedVoiceName = document.getElementById('voice-select').value;
+  var language = document.getElementById('language').value;
+  var selectedVoiceName = document.getElementById('voice-select').value;
 
   // Check if both language and voice are selected
   if (!language) {
@@ -174,7 +172,7 @@ function testVoice() {
     return;
   }
 
-  const selectedVoice = voices.find(voice => voice.name === selectedVoiceName); // Match by name
+  var selectedVoice = voices.find(voice => voice.name === selectedVoiceName); // Match by name
   if (!selectedVoice) {
     alert("Selected voice not found.");
     return;
@@ -187,7 +185,7 @@ function testVoice() {
   }
 
   // Create a SpeechSynthesisUtterance for the sample text
-  const msg = new SpeechSynthesisUtterance(sampleText);
+  var msg = new SpeechSynthesisUtterance(sampleText);
   msg.lang = language;
   msg.voice = selectedVoice;
 
@@ -198,25 +196,25 @@ function testVoice() {
 
 
 async function startInterview() {
-  const language = document.getElementById('language').value;
-  const voice = document.getElementById('voice-select').value;
-  const field = document.getElementById('field').value;
-  const user_info = document.getElementById('user-info').value;
-  const job_des = document.getElementById('job-des').value;
+  var language = document.getElementById('language').value;
+  var voice = document.getElementById('voice-select').value;
+  var field = document.getElementById('field').value;
+  var user_info = document.getElementById('user-info').value;
+  var job_des = document.getElementById('job-des').value;
 
   if (!language || !voice || !field) {
     alert("Please select a language, voice and specify the field or career.");
     return;
   }
 
-  const url = 'http://127.0.0.1:5000/get-interview-greeting';
-  const params = { language, field, user_info, job_des };
+  var url = 'http://127.0.0.1:5000/get-interview-greeting';
+  var params = { language, field, user_info, job_des };
 
-  const greeting = await fetchAPI(url, params);
+  var greeting = await fetchAPI(url, params);
   if (greeting) {
     openModal();
 
-    const image = "images/interviwer.webp";
+    var image = "images/interviwer.webp";
     className = "interviewer-message-row"
     message = greeting;
     displayMessage(image, className, message);
@@ -227,24 +225,24 @@ async function startInterview() {
 }
 
 async function thanksAndGoodBy() {
-  const language = document.getElementById('language').value;
-  const field = document.getElementById('field').value;
-  const user_info = document.getElementById('user-info').value;
-  const job_des = document.getElementById('job-des').value;
+  var language = document.getElementById('language').value;
+  var field = document.getElementById('field').value;
+  var user_info = document.getElementById('user-info').value;
+  var job_des = document.getElementById('job-des').value;
 
   if (!language || !field) {
     alert("Please select a language and specify the field or career.");
     return;
   }
 
-  const url = 'http://127.0.0.1:5000/get-interview-thanks-and-goodbye';
-  const params = { language, field, user_info, job_des, questions, answers };
-  const goodbye = await fetchAPI(url, params);
+  var url = 'http://127.0.0.1:5000/get-interview-thanks-and-goodbye';
+  var params = { language, field, user_info, job_des, questions, answers };
+  var goodbye = await fetchAPI(url, params);
   if (goodbye) {
     interviewFinished = true;
     openModal();
 
-    const image = "images/interviwer.webp";
+    var image = "images/interviwer.webp";
     className = "interviewer-message-row"
     message = goodbye.replace(/\[.*?\]/g, '')
       .trim();
@@ -255,7 +253,7 @@ async function thanksAndGoodBy() {
 }
 
 function enableChatButtons(value) {
-  const chatButtons = document.querySelectorAll('.chat-button');
+  var chatButtons = document.querySelectorAll('.chat-button');
   chatButtons.forEach(button => {
     button.disabled = !value;
     button.style.color = value ? "white" : "grey";
@@ -273,9 +271,9 @@ function populateVoiceList() {
 
 // Update the voice list dynamically based on the selected language
 function updateVoiceList() {
-  const languageSelect = document.getElementById('language');
-  const selectedLanguage = languageSelect.value; // Get the selected language
-  const voiceSelect = document.getElementById('voice-select');
+  var languageSelect = document.getElementById('language');
+  var selectedLanguage = languageSelect.value; // Get the selected language
+  var voiceSelect = document.getElementById('voice-select');
 
   if (!selectedLanguage) {
     // Disable the voice list if no language is selected
@@ -289,9 +287,9 @@ function updateVoiceList() {
   voiceSelect.innerHTML = '<option value="">-- Select a Voice --</option>'; // Reset options
 
   // Filter voices based on the selected language
-  const filteredVoices = voices.filter(voice => voice.lang.startsWith(selectedLanguage));
+  var filteredVoices = voices.filter(voice => voice.lang.startsWith(selectedLanguage));
   filteredVoices.forEach((voice, index) => {
-    const option = document.createElement('option');
+    var option = document.createElement('option');
     option.value = voice.name; // Use the voice's name as the value
     option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' [Default]' : ''}`;
     voiceSelect.appendChild(option);
@@ -299,7 +297,7 @@ function updateVoiceList() {
 
   // Show a message if no voices are available for the selected language
   if (voiceSelect.options.length === 1) {
-    const noVoiceOption = document.createElement('option');
+    var noVoiceOption = document.createElement('option');
     noVoiceOption.value = "";
     noVoiceOption.textContent = "No voices available for the selected language";
     voiceSelect.appendChild(noVoiceOption);
@@ -309,20 +307,20 @@ function updateVoiceList() {
 function speak(text, language, readFirstQuestion = false) {
   window.speechSynthesis.cancel();
   enableChatButtons(false)
-  const msg = new SpeechSynthesisUtterance(text);
+  var msg = new SpeechSynthesisUtterance(text);
   msg.lang = language
 
   // Get the selected voice from the dropdown
-  const selectedVoiceName = document.getElementById('voice-select').value;
-  const selectedVoice = voices.find(voice => voice.name === selectedVoiceName); // Match by name
+  var selectedVoiceName = document.getElementById('voice-select').value;
+  var selectedVoice = voices.find(voice => voice.name === selectedVoiceName); // Match by name
   if (selectedVoice) {
     msg.voice = selectedVoice;
   } else {
     console.warn("No matching voice found. Using the default voice.");
   }
 
-  const interviewerProfile = document.querySelector('.interviewer');
-  const pulseIntensity = 0.8;
+  var interviewerProfile = document.querySelector('.interviewer');
+  var pulseIntensity = 0.8;
   interviewerProfile.style.setProperty('--pulse-speed', `${pulseIntensity}s`);
 
   interviewerProfile.classList.add('speaking_waves');
@@ -354,7 +352,7 @@ window.onload = () => {
 };
 
 
-
+//Avslutar intervjun och återställer chatten
 
 function openModal() {
   document.getElementById('interview-modal').style.display = 'flex';
@@ -369,7 +367,7 @@ function closeModal() {
 function endInterview() {
   stopListning()
   stopSpeaking()
-  const chatBody = document.getElementById('chat-body');
+  var chatBody = document.getElementById('chat-body');
   chatBody.innerHTML = ""
   document.getElementById('answer').value = ""
   questions = [];
@@ -379,9 +377,10 @@ function endInterview() {
   closeModal();
 }
 
+//Visar meddelanden i chatten med bild och text (append innebär att nya divar läggs till varje gång ett svar, feedback eller fråga skrivs i chatboxen).
 function displayMessage(image, className, message) {
 
-  const chatBody = document.getElementById('chat-body');
+  var chatBody = document.getElementById('chat-body');
 
   var userImage = document.createElement('img');
   userImage.src = image
@@ -404,28 +403,29 @@ function displayMessage(image, className, message) {
   chatBody.appendChild(userMessageRow);
   chatBody.scrollTop = chatBody.scrollHeight;
 }
+//Skickar användarens svar och visar feedback från AI
 
 async function sendAnswer() {
-  const language = document.getElementById('language').value;
-  const field = document.getElementById('field').value;
+  var language = document.getElementById('language').value;
+  var field = document.getElementById('field').value;
   var answer = document.getElementById('answer');
   if (answer.value.trim() !== '') {
-    const image = "images/user.png";
+    var image = "images/user.png";
     className = "user-message-row"
     message = textarea.value;
     textarea.value = "";
     displayMessage(image, className, message);
 
-    const url = 'http://127.0.0.1:5000/analyse-the-answer';
-    const answer_value = message
+    var url = 'http://127.0.0.1:5000/analyse-the-answer';
+    var answer_value = message
     answers.push(answer_value)
-    const params = { language, field, answer_value };
+    var params = { language, field, answer_value };
 
-    const feedback = await fetchAPI(url, params);
+    var feedback = await fetchAPI(url, params);
     if (feedback.response) {
       openModal();
 
-      const image = "images/interviwer.webp";
+      var image = "images/interviwer.webp";
       className = "interviewer-message-row"
       message = feedback.response;
       displayMessage(image, className, message);

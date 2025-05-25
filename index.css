@@ -60,14 +60,23 @@ header {
 }
 
 .text-box p {
-    color: #dddddd; /* Ljusgrå text */
+    color: #dddddd; 
     line-height: 1.6;
+}
+
+.text-box a {
+    color: rgb(30, 95, 147); 
+    text-decoration: none; 
+}
+
+.text-box a:hover {
+    color: #4e4f54; 
 }
 
 .text-box ul {
     list-style-type: disc;
     margin-left: 20px;
-    color: #cccccc; /* Ljusgrå färg */
+    color: #cccccc; 
 }
 
 /* Hero Section Styling */

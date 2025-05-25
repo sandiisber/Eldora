@@ -4,11 +4,10 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-# Ladda miljövariabler från .env-filen
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origps": "*"}})
+CORS(app, resources={r"/*": {"origps": "*"}}) 
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
